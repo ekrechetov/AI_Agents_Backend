@@ -24,11 +24,11 @@ class GeminiService {
       })),
     })
 
-    const response = await chat.sendMessage({
-      message: messages[messages.length - 1].content,
-    })
+    // const response = await chat.sendMessage({
+    //   message: messages[messages.length - 1].content,
+    // })
 
-    return response.text
+    // return response.text
   }
 }
 
