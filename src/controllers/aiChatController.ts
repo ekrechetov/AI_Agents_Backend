@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { ChatRequestDTO } from '../types/aiTypes.js'
-
 import geminiService from '../services/geminiService.js'
 // import { BAD_REQUEST } from '../constants/httpStatus.js'
 // import AppError from '../utils/AppError.js'

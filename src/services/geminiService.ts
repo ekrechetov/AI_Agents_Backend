@@ -1,5 +1,4 @@
 import { GoogleGenAI } from '@google/genai'
-// import 'dotenv/config'
 import type { ChatMessageDTO } from '../types/aiTypes.js'
 
 class GeminiService {
