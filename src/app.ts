@@ -14,9 +14,12 @@ app.use(cors({ origin: 'http://localhost:5173' }))
 app.use(express.json({ limit: '1mb' }))
 
 /* автоматически добавляет HTTP-заголовки безопасности */
-app.use(helmet({
-    contentSecurityPolicy: false // т.к. иногда CSP может блокировать фронтенд
-}))
+// app.use(helmet({
+//     contentSecurityPolicy: false // т.к. иногда CSP может блокировать фронтенд
+// }))
+
+// @ts-ignore
+app.use(helmet.default ? helmet.default() : helmet())
 
 /* Логирует входящие HTTP-запросы */
 app.use(morgan('combined'))
