@@ -4,5 +4,6 @@ export interface ChatMessageDTO {
 }
 
 export interface ChatRequestDTO {
+	message: string
   history: ChatMessageDTO[]
 }

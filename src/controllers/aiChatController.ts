@@ -11,7 +11,7 @@ export const handleChatStream = async (
   next: NextFunction
 ) => {
   try {
-    const { history } = req.body
+    const { message, history } = req.body
 
     if (!history || history.length === 0) {
       return res.status(400).json({
@@ -20,15 +20,16 @@ export const handleChatStream = async (
       })
     }
     console.log('Received chat history:', history)
-    // const result = await geminiService.createChat(messages)
+    console.log('Received chat messages:', message)
+    const result = await geminiService.createChat(message, history)
 
-    // return res.status(200).json({
-    //   success: true,
-    //   data: {
-    //     role: 'assistant',
-    //     content: result,
-    //   },
-    // })
+    return res.status(200).json({
+      success: true,
+      data: {
+        role: 'model',
+        content: result,
+      },
+    })
   } catch (error) {
     next(error)
   }

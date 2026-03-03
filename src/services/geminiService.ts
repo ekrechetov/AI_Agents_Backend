@@ -15,20 +15,20 @@ class GeminiService {
     })
   }
 
-  async createChat(messages: ChatMessageDTO[]) {
+  async createChat(message: string, history: ChatMessageDTO[]) {
     const chat = await this.ai.chats.create({
       model: 'gemini-3-flash-preview',
-      history: messages.map((msg) => ({
+      history: history.map((msg) => ({
         role: msg.role,
         parts: [{ text: msg.content }],
       })),
     })
 
-    // const response = await chat.sendMessage({
-    //   message: messages[messages.length - 1].content,
-    // })
+    const response = await chat.sendMessage({
+      message: message,
+    })
 
-    // return response.text
+    return response.text
   }
 }
 
