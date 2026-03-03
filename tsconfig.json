@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    "types": ["node"],
     "moduleResolution": "NodeNext",
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
