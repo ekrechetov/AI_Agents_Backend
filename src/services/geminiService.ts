@@ -25,11 +25,9 @@ class GeminiService {
 			history: history
     })
 
-    const response = await chat.sendMessage({
+    return await chat.sendMessageStream({
       message: message
     })
-
-    return response.text
   }
 }
 

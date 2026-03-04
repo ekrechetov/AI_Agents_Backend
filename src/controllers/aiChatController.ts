@@ -5,11 +5,12 @@ import geminiService from '../services/geminiService.js'
 export const handleChatStream = async (
   req: Request<{}, {}, ChatRequestDTO>,
   res: Response,
-  next: NextFunction
+  // next: NextFunction
 ) => {
+  const { message, history } = req.body
   try {
-    console.log('params req', req)
-    const { message, history } = req.body
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+    res.setHeader('Transfer-Encoding', 'chunked')
 
     if (!history || history.length === 0) {
       return res.status(400).json({
@@ -23,16 +24,21 @@ export const handleChatStream = async (
         parts: msg.parts.map(part => ({ text: part.text }))
     }))
 
-    const result = await geminiService.createChat(message, formattedHistory)
+    const stream = await geminiService.createChat(message, formattedHistory)
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        role: 'model',
-        content: result,
+    for await (const chunk of stream) {
+      // Извлекаем текст из первого кандидата (стандартный формат)
+      const text = chunk.candidates?.[0]?.content?.parts?.[0]?.text
+      console.log('text stream!!', text)
+      if (text) {
+        res.write(text)
       }
-    })
+    }
+
+    res.end()
   } catch (error) {
-    next(error)
+    // next(error) // change unten ?
+    console.error('API Error:', error)
+    res.status(500).end()
   }
 }
