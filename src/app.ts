@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import router from './routes/aiChatRoutes.js'
 
 // import aiRoutes from './routes/ai.routes.js'
 // import errorMiddleware from './middlewares/error.middleware.js'
@@ -37,5 +38,6 @@ app.use(morgan('combined'))
 // app.use(requestIdMiddleware)
 // app.use('/api/ai', aiRoutes)
 // app.use(errorMiddleware)
+app.use('/', router);
 
 export default app
