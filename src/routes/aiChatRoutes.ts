@@ -6,6 +6,7 @@ const router = Router()
 router.post('/api/chat', handleChatStream)
 
 router.get('/', function (req, res) {
+	console.log('Received request to /, Hello !!!!')
 	res.send('Hello World!!!!')
 })
 
