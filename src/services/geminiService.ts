@@ -1,6 +1,9 @@
 import { GoogleGenAI } from '@google/genai'
 import type { ChatMessageDTO } from '../types/aiTypes.js'
-import { LLM_MODEL } from '../constants.js'
+
+export enum LLM_MODEL {
+  Gemini_3_flash = 'gemini-3-flash-preview'
+}
 
 class GeminiService {
 
