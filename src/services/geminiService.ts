@@ -1,7 +1,9 @@
 import { GoogleGenAI } from '@google/genai'
 import type { ChatMessageDTO } from '../types/aiTypes.js'
+import { LLM_MODEL } from '../constants.js'
 
 class GeminiService {
+
   private ai: GoogleGenAI
 
   constructor() {
@@ -15,16 +17,13 @@ class GeminiService {
   }
 
   async createChat(message: string, history: ChatMessageDTO[]) {
-    const chat = await this.ai.chats.create({
-      model: 'gemini-3-flash-preview',
-      history: history.map((msg) => ({
-        role: msg.role,
-        parts: [{ text: msg.content }],
-      })),
+    const chat = this.ai.chats.create({
+      model: LLM_MODEL.Gemini_3_flash,
+			history: history
     })
 
     const response = await chat.sendMessage({
-      message: message,
+      message: message
     })
 
     return response.text

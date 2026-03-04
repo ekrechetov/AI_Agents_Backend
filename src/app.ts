@@ -22,9 +22,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type']
 }));
 
-// app.use(cors({ origin: 'http://localhost:5173' }))
+app.use(express.json())
 
-app.use(express.json({ limit: '1mb' }))
+app.use('/', router)
 
 /* автоматически добавляет HTTP-заголовки безопасности */
 // @ts-ignore
@@ -35,10 +35,12 @@ app.use(morgan('combined'))
 
 // app.use(requestIdMiddleware)
 // app.use(errorMiddleware)
-app.use((req, res, next) => {
-  console.log("EXPRESS LOG -> Method:", req.method, "URL:", req.url);
-  next();
-})
-app.use('/', router)
+
+
+/* For log */
+// app.use((req, res, next) => {
+//   console.log("EXPRESS LOG -> Method:", req.method, "URL:", req.url);
+//   next();
+// })
 
 export default app

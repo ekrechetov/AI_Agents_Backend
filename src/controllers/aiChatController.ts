@@ -1,8 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { ChatRequestDTO } from '../types/aiTypes.js'
 import geminiService from '../services/geminiService.js'
-// import { BAD_REQUEST } from '../constants/httpStatus.js'
-// import AppError from '../utils/AppError.js'
 
 export const handleChatStream = async (
   req: Request<{}, {}, ChatRequestDTO>,
@@ -10,6 +8,7 @@ export const handleChatStream = async (
   next: NextFunction
 ) => {
   try {
+    console.log('params req', req)
     const { message, history } = req.body
 
     if (!history || history.length === 0) {
@@ -18,34 +17,22 @@ export const handleChatStream = async (
         message: 'History is required',
       })
     }
-    console.log('Received chat history:', history)
-    console.log('Received chat messages:', message)
-    const result = await geminiService.createChat(message, history)
+
+    const formattedHistory = history.map(msg => ({
+        role: msg.role,
+        parts: msg.parts.map(part => ({ text: part.text }))
+    }))
+
+    const result = await geminiService.createChat(message, formattedHistory)
 
     return res.status(200).json({
       success: true,
       data: {
         role: 'model',
         content: result,
-      },
+      }
     })
   } catch (error) {
     next(error)
   }
 }
-
-
-// export const handleChatStream = async (req: Request, res: Response) => {
-//   const { prompt } = req.body
-
-//   if (!prompt) {
-//     throw new AppError('Prompt is required', BAD_REQUEST)
-//   }
-
-//   const result = await geminiService.createChat(prompt)
-
-//   res.status(200).json({
-//     success: true,
-//     data: result,
-//   })
-// }
