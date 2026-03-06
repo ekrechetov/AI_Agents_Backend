@@ -5,7 +5,7 @@ import geminiService from '../services/geminiService.js'
 export const handleChatStream = async (
   req: Request<{}, {}, ChatRequestDTO>,
   res: Response,
-  // next: NextFunction
+  next: NextFunction
 ) => {
   const { message, history } = req.body
   try {
@@ -29,7 +29,6 @@ export const handleChatStream = async (
     for await (const chunk of stream) {
       // Извлекаем текст из первого кандидата (стандартный формат)
       const text = chunk.candidates?.[0]?.content?.parts?.[0]?.text
-      console.log('text stream!!', text)
       if (text) {
         res.write(text)
       }
@@ -37,8 +36,7 @@ export const handleChatStream = async (
 
     res.end()
   } catch (error) {
-    // next(error) // change unten ?
-    console.error('API Error:', error)
-    res.status(500).end()
+    next(error)
+    res.end()
   }
 }
