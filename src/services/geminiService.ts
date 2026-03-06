@@ -1,9 +1,12 @@
-import { GoogleGenAI } from '@google/genai'
+import { GoogleGenAI, ThinkingLevel } from '@google/genai'
+import { instructionBuilder } from '../builders/prompt.builder.js'
 import type { ChatMessageDTO } from '../types/aiTypes.js'
 
 export enum LLM_MODEL {
   Gemini_3_flash = 'gemini-3-flash-preview'
 }
+
+const maxOutputTokens = 700
 
 class GeminiService {
 
@@ -22,12 +25,18 @@ class GeminiService {
   async createChat(message: string, history: ChatMessageDTO[]) {
     const chat = this.ai.chats.create({
       model: LLM_MODEL.Gemini_3_flash,
-			history: history
+			history,
+      config: {
+        thinkingConfig: {
+          thinkingLevel: ThinkingLevel.LOW // 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH'
+        },
+        systemInstruction: instructionBuilder?.buildInstructions(),
+        maxOutputTokens,
+        temperature: 1.0 // default is 1.0
+      }
     })
 
-    return await chat.sendMessageStream({
-      message: message
-    })
+    return await chat.sendMessageStream({ message })
   }
 }
 

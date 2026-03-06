@@ -1,3 +1,10 @@
+export interface PromtBuilder {
+	baseInstructions?: string[]
+  domainInstructions: string[]
+  uiInstructions?: string[]
+  buildInstructions: () => string
+}
+
 /* Data Transfer Objects (DTOs) for AI chat interactions */
 
 export interface PartDTO {
