@@ -1,43 +1,44 @@
+import type { Response } from 'express'
 import { GoogleGenAI, ThinkingLevel } from '@google/genai'
 import { instructionBuilder } from '../builders/prompt.builder.js'
 import type { ChatMessageDTO } from '../types/aiTypes.js'
+
+const maxOutputTokens = 700
 
 export enum LLM_MODEL {
   Gemini_3_flash = 'gemini-3-flash-preview'
 }
 
-const maxOutputTokens = 700
+const apiKey = process.env.GEMINI_API_KEY
 
-class GeminiService {
-
-  private ai: GoogleGenAI
-
-  constructor() {
-		const apiKey = process.env.GEMINI_API_KEY
-		if (!apiKey) {
-			throw new Error("GEMINI_API_KEY is not defined in environment variables");
-		}
-    this.ai = new GoogleGenAI({
-      apiKey: apiKey
-    })
-  }
-
-  async createChat(message: string, history: ChatMessageDTO[]) {
-    const chat = this.ai.chats.create({
-      model: LLM_MODEL.Gemini_3_flash,
-			history,
-      config: {
-        thinkingConfig: {
-          thinkingLevel: ThinkingLevel.LOW // 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH'
-        },
-        systemInstruction: instructionBuilder?.buildInstructions(),
-        maxOutputTokens,
-        temperature: 1.0 // default is 1.0
-      }
-    })
-
-    return await chat.sendMessageStream({ message })
-  }
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in environment variables")
 }
 
-export default new GeminiService()
+export const geminiService = async (message: string, history: ChatMessageDTO[], res: Response) => {
+
+  const ai = new GoogleGenAI({ apiKey: apiKey })
+
+  const chat = ai.chats.create({
+    model: LLM_MODEL.Gemini_3_flash,
+    history,
+    config: {
+      thinkingConfig: {
+        thinkingLevel: ThinkingLevel.LOW // 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH'
+      },
+      systemInstruction: instructionBuilder?.buildInstructions(),
+      maxOutputTokens,
+      temperature: 1.0 // default is 1.0
+    }
+  })
+
+  const stream = await chat.sendMessageStream({ message })
+
+  for await (const chunk of stream) {
+    // Извлекаем текст из первого кандидата (стандартный формат)
+    const text = chunk.candidates?.[0]?.content?.parts?.[0]?.text
+    if (text) {
+      res.write(text)
+    }
+  }
+}

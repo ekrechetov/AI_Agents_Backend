@@ -7,6 +7,9 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   console.error('ErrorHandler error', err)
+  if (res.headersSent) {
+    return next(err)
+  }
   res.status(500).json({
     success: false,
     message: err.message || 'Internal server error (500)'

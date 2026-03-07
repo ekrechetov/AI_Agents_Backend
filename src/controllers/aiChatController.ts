@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { ChatRequestDTO } from '../types/aiTypes.js'
-import geminiService from '../services/geminiService.js'
+import { geminiService } from '../services/geminiService.js'
 
 export const handleChatStream = async (
   req: Request<{}, {}, ChatRequestDTO>,
@@ -8,34 +8,36 @@ export const handleChatStream = async (
   next: NextFunction
 ) => {
   const { message, history } = req.body
+
+  if (!history || history.length === 0 || !message) {
+    return res.status(400).json({
+      success: false,
+      message: 'History/Message are required',
+    })
+  }
+
   try {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8')
     res.setHeader('Transfer-Encoding', 'chunked')
-
-    if (!history || history.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'History is required',
-      })
-    }
 
     const formattedHistory = history.map(msg => ({
         role: msg.role,
         parts: msg.parts.map(part => ({ text: part.text }))
     }))
 
-    const stream = await geminiService.createChat(message, formattedHistory)
-
-    for await (const chunk of stream) {
-      // Извлекаем текст из первого кандидата (стандартный формат)
-      const text = chunk.candidates?.[0]?.content?.parts?.[0]?.text
-      if (text) {
-        res.write(text)
-      }
-    }
+    await geminiService(message, formattedHistory, res)
 
     res.end()
   } catch (error) {
+    /* если streaming уже начался */
+    if (res.headersSent) {
+      res.write('\n[ERROR]\n')
+      res.write((error as Error).message)
+      res.end()
+
+      return
+    }
+
     next(error)
     res.end()
   }
