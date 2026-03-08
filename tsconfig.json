@@ -20,10 +20,9 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "baseUrl": ".",
-    // "paths": {
-    //   "@shared/*.js": ["src/shared-types/*.ts"],
-    //   "@shared/*": ["src/shared-types/*"]
-    // }
+      "paths": {
+      "../shared-types/*.js": ["./src/shared-types/*.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
