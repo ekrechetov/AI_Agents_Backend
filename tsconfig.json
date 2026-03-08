@@ -18,10 +18,12 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "allowSyntheticDefaultImports": true,
+    "noEmit": true,
     "baseUrl": ".",
-    "paths": {
-      "@shared/*": ["src/shared-types/*"]
-    }
+    // "paths": {
+    //   "@shared/*.js": ["src/shared-types/*.ts"],
+    //   "@shared/*": ["src/shared-types/*"]
+    // }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
