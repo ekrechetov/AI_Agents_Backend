@@ -2,7 +2,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "module": "nodenext",
+    "rootDirs": ["src", "src/shared-types"],
+    "module": "NodeNext",
     "target": "esnext",
     "types": ["node"],
     "moduleResolution": "NodeNext",
@@ -25,6 +26,9 @@
       "@shared/*": ["./src/shared-types/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "src/shared-types"
+  ],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

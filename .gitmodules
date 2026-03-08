@@ -1,4 +1,4 @@
 [submodule "src/shared-types"]
 	path = src/shared-types
-	url = ../ai-agents-types.git
+	url = https://github.com
 	branch = main
