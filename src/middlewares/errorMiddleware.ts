@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
+import { AppError } from '../errors/AppError.js'
 
 export const errorHandler = (
   err: Error,
@@ -10,7 +11,10 @@ export const errorHandler = (
   if (res.headersSent) {
     return next(err)
   }
-  res.status(500).json({
+
+  const statusCode = err instanceof AppError ? err.statusCode : 500
+  
+  res.status(statusCode).json({
     success: false,
     message: err.message || 'Internal server error (500)'
   })

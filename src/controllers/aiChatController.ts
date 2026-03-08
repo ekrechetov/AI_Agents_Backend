@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { ChatRequestDTO } from '../types/aiTypes.js'
 import { geminiService } from '../services/geminiService.js'
+import { AppError } from '../errors/AppError.js'
 
 export const handleChatStream = async (
   req: Request<{}, {}, ChatRequestDTO>,
@@ -10,10 +11,7 @@ export const handleChatStream = async (
   const { message, history } = req.body
 
   if (!history || history.length === 0 || !message) {
-    return res.status(400).json({
-      success: false,
-      message: 'History/Message are required',
-    })
+    return next(new AppError('History/Message are required', 400))
   }
 
   try {
@@ -30,15 +28,15 @@ export const handleChatStream = async (
     res.end()
   } catch (error) {
     /* если streaming уже начался */
+    const message = error instanceof Error ? error.message : 'Unknown error'
     if (res.headersSent) {
       res.write('\n[ERROR]\n')
-      res.write((error as Error).message)
+      res.write(message)
       res.end()
 
       return
     }
 
-    next(error)
-    res.end()
+    next(new AppError('AI service failed', 500))
   }
 }
