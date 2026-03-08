@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import type { ChatRequest } from '../shared-types/index.js'
+import type { ChatRequest } from '@shared/index.js'
 import { geminiService } from '../services/geminiService.js'
 import { AppError } from '../errors/AppError.js'
 
