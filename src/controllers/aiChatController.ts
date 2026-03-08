@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from 'express'
-import type { ChatRequestDTO } from '../types/aiTypes.js'
+import type { ChatRequest } from '../shared-types/index.js'
 import { geminiService } from '../services/geminiService.js'
 import { AppError } from '../errors/AppError.js'
 
 export const handleChatStream = async (
-  req: Request<{}, {}, ChatRequestDTO>,
+  req: Request<{}, {}, ChatRequest>,
   res: Response,
   next: NextFunction
 ) => {

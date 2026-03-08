@@ -1,7 +1,7 @@
 import type { Response } from 'express'
 import { GoogleGenAI, ThinkingLevel } from '@google/genai'
 import { instructionBuilder } from '../builders/prompt.builder.js'
-import type { ChatMessageDTO } from '../types/aiTypes.js'
+import type { ChatMessage } from '../shared-types/index.js'
 
 const maxOutputTokens = 700
 
@@ -15,10 +15,9 @@ if (!apiKey) {
   throw new Error("GEMINI_API_KEY is not defined in environment variables")
 }
 
-export const geminiService = async (message: string, history: ChatMessageDTO[], res: Response) => {
+const ai = new GoogleGenAI({ apiKey: apiKey })
 
-  const ai = new GoogleGenAI({ apiKey: apiKey })
-
+export const geminiService = async (message: string, history: ChatMessage[], res: Response) => {
   const chat = ai.chats.create({
     model: LLM_MODEL.Gemini_3_flash,
     history,
