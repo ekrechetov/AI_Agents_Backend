@@ -1,7 +1,7 @@
 import type { Response } from 'express'
 import { GoogleGenAI, ThinkingLevel } from '@google/genai'
 import { instructionBuilder } from '../builders/prompt.builder.js'
-import type { ChatMessage } from '../shared-types/index.js'
+import type { ChatMessage } from '@shared/index.js'
 
 const maxOutputTokens = 700
 

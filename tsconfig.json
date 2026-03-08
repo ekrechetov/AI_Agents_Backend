@@ -21,7 +21,8 @@
     "noEmit": true,
     "baseUrl": ".",
       "paths": {
-      "../shared-types/*.js": ["./src/shared-types/*.ts"]
+        "@shared/*.js": ["./src/shared-types/*.ts"],
+        "@shared/*": ["./src/shared-types/*"]
     }
   },
   "include": ["src/**/*"],
