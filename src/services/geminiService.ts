@@ -1,6 +1,6 @@
 import type { Response } from 'express'
 import { GoogleGenAI, ThinkingLevel } from '@google/genai'
-import { instructionBuilder } from '../builders/prompt.builder.js'
+import { buildInstructions } from '../builders/promptBuilder.js'
 import type { ChatMessage } from '@shared/index.js'
 
 const maxOutputTokens = 700
@@ -25,7 +25,7 @@ export const geminiService = async (message: string, history: ChatMessage[], res
       thinkingConfig: {
         thinkingLevel: ThinkingLevel.LOW // 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH'
       },
-      systemInstruction: instructionBuilder?.buildInstructions(),
+      systemInstruction: buildInstructions(),
       maxOutputTokens,
       temperature: 1.0 // default is 1.0
     }
