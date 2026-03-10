@@ -23,7 +23,7 @@ export const handleChatStream = async (
         parts: msg.parts.map(part => ({ text: part.text }))
     }))
 
-    await geminiService(message, formattedHistory, res)
+    await geminiService.chat(message, formattedHistory, res)
 
     res.end()
   } catch (error) {
@@ -37,6 +37,7 @@ export const handleChatStream = async (
       return
     }
 
+    // TODO: add final error messge
     next(new AppError('AI service failed', 500))
   }
 }

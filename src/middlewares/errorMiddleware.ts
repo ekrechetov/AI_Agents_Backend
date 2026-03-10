@@ -7,15 +7,22 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error('ErrorHandler error', err)
+  let statusCode = 500
+  let status = 'error'
+  let message = err.message
+
   if (res.headersSent) {
     return next(err)
   }
 
-  const statusCode = err instanceof AppError ? err.statusCode : 500
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    status = err.status;
+  }
   
   res.status(statusCode).json({
-    success: false,
-    message: err.message || 'Internal server error (500)'
+    statusCode: statusCode,
+    status: status,
+    message: message || 'Internal server error (500)'
   })
 }

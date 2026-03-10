@@ -2,13 +2,13 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import router from './routes/aiChatRoutes.js'
+// import router from './routes/aiChatRoutes.js'
+import router from './routes/index.js'
 import { errorHandler } from './middlewares/errorMiddleware.js'
-// import requestIdMiddleware from './middlewares/requestId.middleware.js'
 
 const app = express()
 
-const allowedOrigins = ['http://localhost:5173', 'https://ai-agents.kiiga89mf.com'];
+const allowedOrigins = ['http://localhost:5173', 'https://ai-agents.kiiga89mf.com']
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -19,27 +19,21 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
-}));
+  allowedHeaders: ['Content-Type', 'Content-Transfer-Encoding']
+}))
+
+/* Logs incoming HTTP requests */
+app.use(morgan('dev'))
 
 app.use(express.json())
 
-app.use('/', router)
+app.use(express.text({ type: 'application/octet-stream', limit: '10mb' }))
 
-/* автоматически добавляет HTTP-заголовки безопасности */
+app.use('/api', router)
+
+/* Automatically adds HTTP security headers */
 // @ts-ignore
 app.use(helmet.default ? helmet.default() : helmet())
-
-/* Логирует входящие HTTP-запросы */
-app.use(morgan('combined'))
-
-// app.use(requestIdMiddleware)
-
-/* For log */
-// app.use((req, res, next) => {
-//   console.log("EXPRESS LOG -> Method:", req.method, "URL:", req.url);
-//   next();
-// })
 
 app.use(errorHandler)
 
