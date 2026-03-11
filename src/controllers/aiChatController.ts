@@ -26,7 +26,7 @@ export const handleChatStream = async (
     await geminiService.chat(message, formattedHistory, res)
 
     res.end()
-  } catch (error) {
+  } catch (error: any) {
     /* если streaming уже начался */
     const message = error instanceof Error ? error.message : 'Unknown error'
     if (res.headersSent) {
@@ -37,7 +37,21 @@ export const handleChatStream = async (
       return
     }
 
+    let finalMessage = 'AI service failed'
+    let finalCode = error.status || 500
+      try {
+      // Try parsing the inner JSON from Gemini, if it exists
+      const innerError = JSON.parse(error.message)
+      if (innerError.error) {
+        finalMessage = innerError.error.message;
+        finalCode = innerError.error.code || finalCode
+      }
+    } catch {
+      // If it's not JSON, keep the text as is
+      finalMessage = error.message
+    }
+
     // TODO: add final error messge
-    next(new AppError('AI service failed', 500))
+    next(new AppError(finalMessage, finalCode))
   }
 }
