@@ -2,7 +2,7 @@ import type { Response } from 'express'
 import { GoogleGenAI, ThinkingLevel } from '@google/genai'
 import { buildInstructions } from '../builders/chatPromptBuilder.js'
 import { pdfPrompt } from '../builders/pdfPromtBuilder.js'
-import { InvoiceSchema } from "src/utils/zodInvoiceSheme.js" 
+import { InvoiceSchema } from '../utils/zodInvoiceSheme.js' 
 import type { ChatMessage } from '@shared/index.js'
 
 const maxOutputTokens = 700
