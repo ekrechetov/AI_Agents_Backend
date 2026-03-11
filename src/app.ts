@@ -21,6 +21,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Content-Transfer-Encoding']
 }))
+// Важно: вручную обрабатываем OPTIONS для Vercel
+app.options('*', cors())
 
 /* Logs incoming HTTP requests */
 app.use(morgan('dev'))
