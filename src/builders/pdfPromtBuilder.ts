@@ -1,4 +1,4 @@
-	import { InvoiceSchema } from "src/utils/zodInvoiceSheme.js" 
+	import { InvoiceSchema } from "../utils/zodInvoiceSheme.js" 
   
   export const pdfPrompt = `
     Ти — система для аналізу фінансових документів.
