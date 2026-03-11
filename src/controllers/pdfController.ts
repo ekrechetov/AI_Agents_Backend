@@ -15,7 +15,7 @@ export const handlePdf = async (
 
   try {
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
-    // res.setHeader('Access-Control-Allow-Origin', 'https://ai-agents-backend-git-main-ekrechetovs-projects.vercel.app')
+    res.setHeader('Access-Control-Allow-Origin', 'https://ai-agents.kiiga89mf.com')
 
     const result = await geminiService.pdfExtractor(pdfBase64)
   
