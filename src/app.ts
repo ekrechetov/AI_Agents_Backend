@@ -21,13 +21,13 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Content-Transfer-Encoding']
 }))
 // Принудительный ответ 200 на Preflight запросы
-app.options(/.*'/, (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://ai-agents.kiiga89mf.com')
-  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  res.set('Access-Control-Allow-Credentials', 'true')
-  res.sendStatus(200)
-})
+// app.options(/.*'/, (req, res) => {
+//   res.set('Access-Control-Allow-Origin', 'https://ai-agents.kiiga89mf.com')
+//   res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+//   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+//   res.set('Access-Control-Allow-Credentials', 'true')
+//   res.sendStatus(200)
+// })
 
 /* Logs incoming HTTP requests */
 app.use(morgan('dev'))
