@@ -2,7 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-// import router from './routes/aiChatRoutes.js'
 import router from './routes/index.js'
 import { errorHandler } from './middlewares/errorMiddleware.js'
 
@@ -21,10 +20,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Content-Transfer-Encoding']
 }))
-// Важно: вручную обрабатываем OPTIONS для Vercel
-// app.options('*', cors())
 // Принудительный ответ 200 на Preflight запросы
-app.options('*', (req, res) => {
+app.options(/.*'/, (req, res) => {
   res.set('Access-Control-Allow-Origin', 'https://ai-agents.kiiga89mf.com')
   res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
